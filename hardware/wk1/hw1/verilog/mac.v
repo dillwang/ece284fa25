@@ -27,8 +27,9 @@ wire [bw-2:0] mag_b = b_q[bw-2:0];
 wire sign_mult = sign_a ^ sign_b;
 wire [2*bw-3:0] mag_mult = mag_a * mag_b;
 wire signed [psum_bw-1:0] mult_signed = sign_mult ? -$signed({1'b0, mag_mult}) : $signed({1'b0, mag_mult});
+wire signed [psum_bw-1:0] psum_abs = psum_q[psum_bw-1] ? -psum_q : psum_q;
 
-assign out = format ? (psum_q[psum_bw-1] ? {1'b1, -psum_q[psum_bw-2:0]} : {1'b0, psum_q[psum_bw-2:0]}) : psum_q;
+assign out = format ? {psum_q[psum_bw-1], psum_abs[psum_bw-2:0]} : psum_q;
 
 always_ff @(posedge clk) begin
     if (reset) begin
