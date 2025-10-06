@@ -22,6 +22,28 @@ reg signed [bw-1:0] b_q;
 assign out = psum_q;
 
 // Your code goes here
-
+always_ff @(posedge clk) begin
+    if (reset) begin
+        psum_q <= 0;
+        a_q <= 0;
+        b_q <= 0;
+    end else begin
+        a_q <= A;
+        b_q <= B;
+        if (format) begin
+            if (acc) begin
+                psum_q <= psum_q + (a_q * b_q); // Accumulate the product
+            end else begin
+                psum_q <= psum_q; // Maintain the previous value
+            end
+        end else begin
+            if (acc) begin
+                psum_q <= a_q * b_q; // Just the product
+            end else begin
+                psum_q <= 0; // Reset to zero if not accumulating
+            end 
+        end
+    end
+end
 
 endmodule
