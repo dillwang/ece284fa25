@@ -31,14 +31,14 @@ wire signed [psum_bw-1:0] psum_abs = psum_q[psum_bw-1] ? -psum_q : psum_q;
 
 assign out = format ? {psum_q[psum_bw-1], psum_abs[psum_bw-2:0]} : psum_q;
 
-always_ff @(posedge clk) begin
+always @(posedge clk) begin
     if (reset) begin
         psum_q <= 0;
         a_q <= 0;
         b_q <= 0;
     end else begin
+	b_q <= B;
         a_q <= A;
-        b_q <= B;
         if (acc) begin
             if (format) begin
                 psum_q <= psum_q + mult_signed; // Accumulate the product using sign-magnitude
